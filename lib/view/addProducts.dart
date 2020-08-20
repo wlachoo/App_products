@@ -18,7 +18,9 @@ class _AddDataProductState extends State<AddDataProduct> {
 
   final TextEditingController _nameController = new TextEditingController();  
   final TextEditingController _priceController = new TextEditingController();
-  final TextEditingController _stockController = new TextEditingController();
+  final TextEditingController _pictureController = new TextEditingController();
+  final TextEditingController _categoryController = new TextEditingController();
+  final TextEditingController _descriptionController = new TextEditingController();
 
 
   @override
@@ -65,22 +67,54 @@ class _AddDataProductState extends State<AddDataProduct> {
               Container(
                 height: 50,
                 child: new TextField(
-                  controller: _stockController,
+                  controller: _pictureController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    labelText: 'stock',
-                    hintText: 'Place your stock',
+                    labelText: 'Imagen',
+                    hintText: 'Place your image',
                     icon: new Icon(Icons.vpn_key),
                   ),
                 ),
               ),
+
+              new Padding(padding: new EdgeInsets.only(top: 44.0),),
+
+              Container(
+                height: 50,
+                child: new TextField(
+                  controller: _categoryController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'categoria',
+                    hintText: 'Place your category',
+                    icon: new Icon(Icons.vpn_key),
+                  ),
+                ),
+              ),
+
+              new Padding(padding: new EdgeInsets.only(top: 44.0),),
+
+              Container(
+                height: 50,
+                child: new TextField(
+                  controller: _descriptionController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'descripcion',
+                    hintText: 'Place your description',
+                    icon: new Icon(Icons.vpn_key),
+                  ),
+                ),
+              ),
+
+
              new Padding(padding: new EdgeInsets.only(top: 44.0),),
               Container(
                 height: 50,
                 child: new RaisedButton(
                   onPressed: (){
                     databaseHelper.addDataProducto(
-                        _nameController.text.trim(), _priceController.text.trim(), _stockController.text.trim());
+                        _nameController.text.trim(), _priceController.text.trim(), _pictureController.text.trim(), _categoryController.text.trim(), _descriptionController.text.trim());
                     Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (BuildContext context) => new MainPage(),

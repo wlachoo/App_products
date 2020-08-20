@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:appnode/view/detailProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListProducts extends StatefulWidget {
   @override
@@ -15,8 +16,18 @@ class _ListProductsState extends State<ListProducts> {
   List data;
 
   Future<List> getData() async {
-    final response = await http.get("https://product-apirest.herokuapp.com/api/product");
-    return json.decode(response.body);
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'token';
+    final value = prefs.get(key ) ?? 0;
+
+    final response = await http.get("https://product-apirest.herokuapp.com/api/product",
+        headers: {
+          'Accept':'application/json',
+          'Authorization' : 'Bearer $value'
+        });
+        var data1 = json.decode(response.body);
+        print(data1["products"]);
+    return data1["products"] ;
   }
 
   @override
@@ -35,17 +46,17 @@ class _ListProductsState extends State<ListProducts> {
       body: new FutureBuilder<List>(
         future: getData(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          return snapshot.hasData
-              ? new ItemList(
+          if(snapshot.hasData){
+            return ItemList(
                   list: snapshot.data,
-                )
-              : new Center(
-                  child: new CircularProgressIndicator(),
                 );
+          }else if (snapshot.hasError){
+            print(snapshot.error);
+            return Text("${snapshot.error}");
+          }
+          return CircularProgressIndicator();
         },
       ),
-      
     );
   }
 }

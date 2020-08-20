@@ -20,7 +20,9 @@ class _EditProductState extends State<EditProduct> {
 
   TextEditingController controllerName;
   TextEditingController controllerPrice;
-  TextEditingController controllerStock;
+  TextEditingController controllerPicture;
+  TextEditingController controllerCategory;
+  TextEditingController controllerDescription;
   TextEditingController controllerId;
 
   @override
@@ -29,7 +31,9 @@ class _EditProductState extends State<EditProduct> {
     controllerId= new TextEditingController(text: widget.list[widget.index]['_id'].toString() );
     controllerName= new TextEditingController(text: widget.list[widget.index]['name'].toString() );
     controllerPrice= new TextEditingController(text: widget.list[widget.index]['price'].toString() );
-    controllerStock= new TextEditingController(text: widget.list[widget.index]['stock'].toString() );
+    controllerPicture= new TextEditingController(text: widget.list[widget.index]['stock'].toString() );
+    controllerCategory= new TextEditingController(text: widget.list[widget.index]['stock'].toString() );
+    controllerDescription= new TextEditingController(text: widget.list[widget.index]['stock'].toString() );
     super.initState();
     
   }
@@ -87,12 +91,36 @@ class _EditProductState extends State<EditProduct> {
                   new ListTile(
                     leading: const Icon(Icons.settings_input_component, color: Colors.black),
                     title: new TextFormField(
-                      controller: controllerStock,
+                      controller: controllerPicture,
                           validator: (value) {
-                            if (value.isEmpty) return "Ingresa Stock";
+                            if (value.isEmpty) return "Ingresa la imagen";
                           },
                       decoration: new InputDecoration(
-                        hintText: "Stock", labelText: "Stock",
+                        hintText: "Imagen", labelText: "Imagen",
+                      ),
+                    ),
+                  ),
+                  new ListTile(
+                    leading: const Icon(Icons.settings_input_component, color: Colors.black),
+                    title: new TextFormField(
+                      controller: controllerCategory,
+                          validator: (value) {
+                            if (value.isEmpty) return "Ingresa Categoria";
+                          },
+                      decoration: new InputDecoration(
+                        hintText: "Categoria", labelText: "Categoria",
+                      ),
+                    ),
+                  ),
+                  new ListTile(
+                    leading: const Icon(Icons.settings_input_component, color: Colors.black),
+                    title: new TextFormField(
+                      controller: controllerDescription,
+                          validator: (value) {
+                            if (value.isEmpty) return "Ingresa Descripcion";
+                          },
+                      decoration: new InputDecoration(
+                        hintText: "Descripcion", labelText: "Descripcion",
                       ),
                     ),
                   ),
@@ -107,7 +135,7 @@ class _EditProductState extends State<EditProduct> {
                     color: Colors.blueAccent,
                     onPressed: (){
                     databaseHelper.editarProduct(
-                        controllerId.text.trim(), controllerName.text.trim(), controllerPrice.text.trim(), controllerStock.text.trim());
+                        controllerId.text.trim(), controllerName.text.trim(), controllerPrice.text.trim(), controllerPicture.text.trim(), controllerCategory.text.trim(), controllerDescription.text.trim());
                     Navigator.of(context).push(
                         new MaterialPageRoute(
                           builder: (BuildContext context) => new ListProducts(),

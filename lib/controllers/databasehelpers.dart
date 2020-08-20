@@ -28,7 +28,7 @@ class DataBaseHelper {
 
 
   //function for register products
-  void addDataProducto(String _nameController, String _priceController, String _stockController) async {
+  void addDataProducto(String _nameController, String _priceController, String _pictureController, String _categoryController, String _descriptionController) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = prefs.get(key ) ?? 0;
@@ -37,12 +37,15 @@ class DataBaseHelper {
    String myUrl = "https://product-apirest.herokuapp.com/api/product";
    final response = await  http.post(myUrl,
         headers: {
-          'Accept':'application/json'
+          'Accept':'application/json',
+          'Authorization' : 'Bearer $value'
         },
         body: {
           "name":       "$_nameController",
           "price":      "$_priceController",        
-          "stock":      "$_stockController"
+          "picture":      "$_pictureController",
+          "category":      "$_categoryController",
+          "description":      "$_descriptionController",
         } ) ;
     status = response.body.contains('error');
 
@@ -57,17 +60,23 @@ class DataBaseHelper {
   }
 
   //function for update or put
-  void editarProduct(String _id, String name, String price, String stock) async {
+  void editarProduct(String _id, String name, String price, String picture, String category, String description) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = prefs.get(key ) ?? 0;
 
     String myUrl = "https://product-apirest.herokuapp.com/api/product/$_id";
     http.put(myUrl,
+        headers: {
+          'Accept':'application/json',
+          'Authorization' : 'Bearer $value'
+        },
         body: {
          "name":       "$name",
          "price":       "$price",
-         "stock":      "$stock"
+         "picture":      "$picture",
+         "category":      "$category",
+         "description":      "$description"
         }).then((response){
       print('Response status : ${response.statusCode}');
       print('Response body : ${response.body}');
@@ -80,7 +89,15 @@ class DataBaseHelper {
 
   String myUrl = "https://product-apirest.herokuapp.com/api/product/$_id";
 
-  Response res = await http.delete("$myUrl");
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'token';
+    final value = prefs.get(key ) ?? 0;
+
+  Response res = await http.delete("$myUrl",
+    headers: {
+      'Accept':'application/json',
+      'Authorization' : 'Bearer $value'
+    });
 
   if (res.statusCode == 200) {
     print("DELETED");
